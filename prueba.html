@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let palabra = 'arbol';
+        const url = ' https://api.dictionaryapi.dev/api/v2/entries/es/'+palabra;
+
+        const resultado = await fetch(url);
+        console.log(resultado);
+            // .then(response => response.json())
+            // .then(data => {
+                
+            //     if(data[0]!=undefined){
+            //         console.log(data[0]);
+            //     }else{
+            //         console.log('palabra no valida');
+            //     }
+                
+            // });
+    </script>
+</body>
+</html>

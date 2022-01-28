@@ -1,4 +1,4 @@
-var palabra = 'ARBOL';
+var palabra = 'AVENA';
 
 const comprobarPalabra = (index)=>{
     let filas = document.querySelectorAll('tr');
@@ -14,7 +14,6 @@ const comprobarPalabra = (index)=>{
     }
 
     for(let columna = 0; columna<filas[index].children.length; columna++){
-        console.log(filas[index].children[columna].style.backgroundColor);
         if(filas[index].children[columna].style.backgroundColor!='rgb(106, 170, 100)'){
             return false;
         }
@@ -42,6 +41,33 @@ const crearArray = ()=>{
     return arrayLetras;
 }
 
+
+async function comprobarDiccionario(index){
+    let filas = document.querySelectorAll('tr');
+    let palabraCan='';
+    
+
+    for(let columna = 0; columna<filas[index].children.length; columna++){
+        palabraCan += filas[index].children[columna].textContent;
+    }
+
+    //Hacemos la busqueda
+    const url = 'https://api.dictionaryapi.dev/api/v2/entries/es/'+palabraCan;
+
+    let resultado = await fetch(url);
+    resultado = await resultado.json();
+    
+    return resultado[0]!=undefined;
+}
+
+// generarAleatoria = ()=>{
+
+//     const url = "https://palabras-aleatorias-public-api.herokuapp.com/random";
+
+    
+// }
+
+
 const borrarLetra = (index)=>{
     let filas = document.querySelectorAll('tr');
     let poslibre = celdaLibre(index);
@@ -56,12 +82,22 @@ const borrarLetra = (index)=>{
 }
 
 window.onload = ()=>{
+    var field = document.createElement('input');
+    field.setAttribute('type', 'text');
+    document.body.appendChild(field);
+
+    setTimeout(function() {
+        field.focus();
+        setTimeout(function() {
+            field.setAttribute('style', 'display:none;');
+        }, 50);
+    }, 50);
     let filas = document.querySelectorAll('tr');
     let index = 0;
 
     let arrayLetras = crearArray();
 
-    window.addEventListener('keydown', (e)=>{
+    window.addEventListener('keydown', async (e)=>{
         if(e.keyCode==13 || arrayLetras.includes(e.keyCode) || e.keyCode==8){
             let coorLibres = celdaLibre(index);
         
@@ -70,10 +106,15 @@ window.onload = ()=>{
             }
 
             if(e.key=='Enter' && coorLibres==0){
-                if(!comprobarPalabra(index)){
-                    index++;
+                
+                if(await comprobarDiccionario(index)){
+                    if(!comprobarPalabra(index)){
+                        index++;
+                    }else{
+                        alert('has ganado');
+                    }
                 }else{
-                    alert('has ganado');
+                    alert('la palabra no esta en el diccionario')
                 }
             }
 
@@ -81,7 +122,6 @@ window.onload = ()=>{
                 borrarLetra(index);
             }
         }
-        console.log(e);
 
     });
     
