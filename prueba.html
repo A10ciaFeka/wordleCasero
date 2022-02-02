@@ -8,21 +8,35 @@
 </head>
 <body>
     <script>
-        let palabra = 'arbol';
-        const url = ' https://api.dictionaryapi.dev/api/v2/entries/es/'+palabra;
+        async function palabraAleatoria(){
+            const url = "https://palabras-aleatorias-public-api.herokuapp.com/random";
 
-        const resultado = await fetch(url);
-        console.log(resultado);
-            // .then(response => response.json())
-            // .then(data => {
-                
-            //     if(data[0]!=undefined){
-            //         console.log(data[0]);
-            //     }else{
-            //         console.log('palabra no valida');
-            //     }
-                
-            // });
+            let resultado = await fetch(url);
+            resultado = await resultado.json();
+        
+            if(resultado.body.Word.length==5){
+                return resultado.body.Word;
+            }else{
+                return 0;
+            }
+        }
+
+        const pillarPalabra = async()=>{
+            let terminado = false;
+            let palabraAle = '';
+
+            while(palabraAle.length==0){
+                console.log(palabraAle.length);
+                let pal = await palabraAleatoria();
+                if(pal != 0){
+                    palabraAle = pal;
+                }
+            }
+
+            return palabraAle;
+        }
+
+        console.log(pillarPalabra());
     </script>
 </body>
 </html>
